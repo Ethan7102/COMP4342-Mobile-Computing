@@ -1,9 +1,9 @@
 <?php
-	$servername="";
-	$username="";
+	$servername="localhost";
+	$username="root";
 	$password="";
-	$dbname="";
-    $link = mysqli_connect($servername, $username, $password) or die("cannot connect")
+	$dbname="comp4342_msdb";
+    $link = mysqli_connect($servername, $username, $password) or die("cannot connect");
 	mysqli_select_db($link, $dbname) or die("connect db fail");
 	$link -> set_charset("UTF8");
 ?>
