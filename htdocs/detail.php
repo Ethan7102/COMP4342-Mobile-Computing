@@ -5,7 +5,7 @@
 	
 	while ($row = $result->fetch_assoc())
     {
-        $output[] = $row;
+        $output[] = $row; // 就逐項將回傳的東西放到陣列中
     }
 	echo json_encode($output, JSON_UNESCAPED_UNICODE);
 	$link->close();
