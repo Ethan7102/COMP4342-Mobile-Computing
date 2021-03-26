@@ -1,6 +1,6 @@
 <?php include 'dbconnect.php';
-		
-	$sql="SELECT * FROM product WHERE productID='123'";
+	$id=$_POST["id"];	
+	$sql="SELECT * FROM product WHERE productID='$id'";
 	$result=$link->query($sql) or die($link->error);
 	
 	while ($row = $result->fetch_assoc())
