@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `COMP4342_MSDB` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `COMP4342_MSDB` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `COMP4342_MSDB`;
 -- MySQL dump 10.13  Distrib 8.0.21, for macos10.15 (x86_64)
 --
@@ -26,11 +26,11 @@ DROP TABLE IF EXISTS `order`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order` (
   `orderID` int NOT NULL,
-  `confirmationCode` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `address` varchar(200) DEFAULT NULL,
+  `confirmationCode` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`orderID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -57,7 +57,7 @@ CREATE TABLE `orderDetail` (
   KEY `fk_productID_idx` (`productID`),
   CONSTRAINT `fk_orderID` FOREIGN KEY (`orderID`) REFERENCES `order` (`orderID`),
   CONSTRAINT `fk_productID` FOREIGN KEY (`productID`) REFERENCES `product` (`productID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,13 +78,13 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `productID` int NOT NULL,
-  `productName` varchar(45) DEFAULT NULL,
-  `productDescription` varchar(300) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
+  `productName` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `productDescription` varchar(300) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `type` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `price` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   PRIMARY KEY (`productID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-09 19:39:53
+-- Dump completed on 2021-03-26 16:26:56
