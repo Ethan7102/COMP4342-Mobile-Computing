@@ -14,9 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnSearch;
-    EditText edSearch;
-    TextView textView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +30,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        btnSearch = findViewById(R.id.btnSearch);
-        edSearch = findViewById(R.id.edSearch);
-        textView = findViewById(R.id.textView);
 
     }
 

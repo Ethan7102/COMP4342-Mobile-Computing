@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:hint="Search"
+                android:inputType="textPersonName" />
 
             <Button
                 android:id="@+id/btnSearch"
@@ -48,10 +48,10 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView"
+        <ListView
+            android:id="@+id/lvProducts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

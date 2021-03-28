@@ -42,6 +42,8 @@ LOCK TABLES `order` WRITE;
 /*!40000 ALTER TABLE `order` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+
 --
 -- Table structure for table `product`
 --
@@ -51,9 +53,10 @@ DROP TABLE IF EXISTS `product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
   `produceID` int NOT NULL,
-  `produceName` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `productDescription` varchar(300) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `type` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `brand` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `productName` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `productDescription` varchar(300) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `price` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   PRIMARY KEY (`produceID`)
@@ -64,11 +67,6 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-LOCK TABLES `product` WRITE;
-/*!40000 ALTER TABLE `product` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
 -- Table structure for table `orderDetail`
@@ -96,6 +94,13 @@ LOCK TABLES `orderDetail` WRITE;
 /*!40000 ALTER TABLE `orderDetail` DISABLE KEYS */;
 /*!40000 ALTER TABLE `orderDetail` ENABLE KEYS */;
 UNLOCK TABLES;
+LOCK TABLES `product` WRITE;
+/*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,'CPU','AMD','AMD Ryzen Threadripper PRO 3995WX','Clock Rate: 2700MHz, Socket: TR4, External 4200MHz, Cache 256MB',47000,100),(2,'CPU','Intel','Intel Core i9-10900K','Clock Rate: 3700MHz, Socket: LGA 1200, External 5300MHz, Cache 20MB',3420,100);
+/*!40000 ALTER TABLE `product` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -104,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-26 17:20:17
+-- Dump completed on 2021-03-28 15:04:45
