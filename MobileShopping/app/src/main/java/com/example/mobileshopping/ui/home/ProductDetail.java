@@ -15,6 +15,7 @@ import com.example.mobileshopping.VolleySingleton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -96,9 +97,11 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_addCart:
                 SharedPreferences cart = getSharedPreferences("shopping_cart", MODE_PRIVATE);
+                int productInCart=cart.getInt(String.valueOf(id), 0);
                 cart.edit()
-                        .putInt(String.valueOf(id), quantityOfCart)
+                        .putInt(String.valueOf(id), quantityOfCart+productInCart)
                         .apply();
+                Log.i("Cart item", String.valueOf(quantityOfCart+productInCart));
                 break;
             case R.id.btn_add:
                 if(quantityOfCart<quantity) {
