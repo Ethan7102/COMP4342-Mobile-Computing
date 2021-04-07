@@ -16,7 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,6 +67,8 @@ public class HomeFragment extends Fragment {
     JSONArray products;
     int numOfDisplayedProducts;
     int[] displayedProductId;
+    Spinner spin;
+    String[] productType = {"All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +86,60 @@ public class HomeFragment extends Fragment {
         btnSearch = root.findViewById(R.id.btnSearch);
         edSearch = root.findViewById(R.id.edSearch);
         lvProducts = root.findViewById(R.id.lvProducts);
+        spin = root.findViewById(R.id.spinner);
+        ArrayAdapter<String> adap = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, productType);
+        adap.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adap);
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                /*Toast.makeText(parent.getContext(),
+                        "OnItemSelectedListener : " + parent.getItemAtPosition(position).toString(),
+                        Toast.LENGTH_SHORT).show();*/
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+                String str = sharedPref.getString("jsonProductList", "null");
+                if (str != "null") {
+                    try {
+                        productList = null;
+                        jObj = new JSONObject(str);
+                        products = jObj.getJSONArray("products");
+                        numOfDisplayedProducts = getNumOfSuitableItem(products, "type", parent.getItemAtPosition(position).toString());
+                        if (numOfDisplayedProducts != 0) {
+                            productList = new String[numOfDisplayedProducts];
+                            displayedProductId = new int[numOfDisplayedProducts];
+                            numOfDisplayedProducts = 0;
+                            for (int i = 0; i < products.length(); i++) {
+                                JSONObject product = products.getJSONObject(i);
+                                if (parent.getItemAtPosition(position).toString().equals("All Product")) {
+                                    displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                } else {
+                                    if (product.getString("type").equals(parent.getItemAtPosition(position).toString())) {
+                                        displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                    }
+                                }
+                            }
+                        }
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+                    if (productList != null) {
+                        ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, productList);
+                        lvProducts.setAdapter(adapter);
+                        lvProducts.setOnItemClickListener(onClickListView);
+                    } else {
+                        lvProducts.setAdapter(null);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
 
         //get products
         InputStream inputStream = null;
@@ -124,30 +182,25 @@ public class HomeFragment extends Fragment {
             //process JSON
             jObj = new JSONObject(result);
             products = jObj.getJSONArray("products");
-            numOfDisplayedProducts = 0;
-            for (int i = 0; i < products.length(); i++) {
-                JSONObject product = products.getJSONObject(i);
-                if (product.getInt("promotion") == 1)
-                    numOfDisplayedProducts++;
-            }
-            productList = new String[numOfDisplayedProducts];
-            displayedProductId = new int[numOfDisplayedProducts];
-            numOfDisplayedProducts = 0;
-            for (int i = 0; i < products.length(); i++) {
-                JSONObject product = products.getJSONObject(i);
-                if (product.getInt("promotion") == 1) {
-                    displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+            numOfDisplayedProducts = getNumOfSuitableItem(products, "promotion", "");
+            if (numOfDisplayedProducts != 0) {
+                productList = new String[numOfDisplayedProducts];
+                displayedProductId = new int[numOfDisplayedProducts];
+                numOfDisplayedProducts = 0;
+                for (int i = 0; i < products.length(); i++) {
+                    JSONObject product = products.getJSONObject(i);
+                    if (product.getInt("promotion") == 1) {
+                        displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
 
+                    }
                 }
+                //save product list
+                //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
+                prefEditor.putString("jsonProductList", result);
+                prefEditor.commit();
             }
-            //save product list
-            //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
-            prefEditor.putString("jsonProductList", result);
-            prefEditor.commit();
-
-
         } catch (Exception e) {
             e.printStackTrace();
             String msg = e.getMessage();
@@ -160,20 +213,17 @@ public class HomeFragment extends Fragment {
                 try {
                     jObj = new JSONObject(str);
                     products = jObj.getJSONArray("products");
-                    numOfDisplayedProducts = 0;
-                    for (int i = 0; i < products.length(); i++) {
-                        JSONObject product = products.getJSONObject(i);
-                        if (product.getInt("promotion") == 1)
-                            numOfDisplayedProducts++;
-                    }
-                    productList = new String[numOfDisplayedProducts];
-                    displayedProductId = new int[numOfDisplayedProducts];
-                    numOfDisplayedProducts = 0;
-                    for (int i = 0; i < products.length(); i++) {
-                        JSONObject product = products.getJSONObject(i);
-                        if (product.getInt("promotion") == 1) {
-                            displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                            productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                    numOfDisplayedProducts = getNumOfSuitableItem(products, "promotion", "");
+                    if (numOfDisplayedProducts != 0) {
+                        productList = new String[numOfDisplayedProducts];
+                        displayedProductId = new int[numOfDisplayedProducts];
+                        numOfDisplayedProducts = 0;
+                        for (int i = 0; i < products.length(); i++) {
+                            JSONObject product = products.getJSONObject(i);
+                            if (product.getInt("promotion") == 1) {
+                                displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                                productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                            }
                         }
                     }
                 } catch (JSONException jsonException) {
@@ -195,5 +245,28 @@ public class HomeFragment extends Fragment {
             System.out.println(displayedProductId[(int) id]);
         }
     };
+
+    private int getNumOfSuitableItem(JSONArray products, String key, String type) throws JSONException {
+        int num = 0;
+        for (int i = 0; i < products.length(); i++) {
+            JSONObject product = products.getJSONObject(i);
+            switch (key) {
+                case "promotion":
+                    if (product.getInt(key) == 1)
+                        num++;
+                    break;
+                case "type":
+                    if (type.equals("All Product")) {
+                        num++;
+                    } else {
+                        if (product.getString(key).equals(type))
+                            num++;
+                    }
+                    break;
+            }
+        }
+        return num;
+    }
+
 }
 
