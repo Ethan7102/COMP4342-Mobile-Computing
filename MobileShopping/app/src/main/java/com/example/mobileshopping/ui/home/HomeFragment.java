@@ -232,11 +232,10 @@ public class HomeFragment extends Fragment {
                     if (product.getInt("promotion") == 1) {
                         displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
                         productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
-
                     }
                 }
+
                 //save product list
-                //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
                 SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
                 prefEditor.putString("jsonProductList", result);
                 prefEditor.commit();
@@ -311,6 +310,5 @@ public class HomeFragment extends Fragment {
         }
         return num;
     }
-
 }
 
