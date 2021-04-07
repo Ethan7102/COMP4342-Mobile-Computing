@@ -127,11 +127,11 @@ public class HomeFragment extends Fragment {
             productObjList = new Product[products.length()];
             for (int i = 0; i < products.length(); i++) {
                 JSONObject product = products.getJSONObject(i);
-                productList[i] = product.getString("brand") + "\n" + product.getString("productName") + "\nHK$" + product.getString("price");
+                productList[i] = product.getString("productName") + "\nHK$" + product.getString("price");
             }
 
             //save product list
-            SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+            //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
             prefEditor.putString("jsonProductList", result);
             prefEditor.commit();
@@ -143,8 +143,8 @@ public class HomeFragment extends Fragment {
             System.out.println("error: " + msg);
 
             //get products from localstorage
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
-            String str = sharedPreferences.getString("jsonProductList", "null");
+            SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+            String str = sharedPref.getString("jsonProductList", "null");
             if (str != "null") {
                 System.out.println(str);
                 try {
@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
                     productList = new String[products.length()];
                     for (int i = 0; i < products.length(); i++) {
                         JSONObject product = products.getJSONObject(i);
-                        productList[i] = product.getString("brand") + "\n" + product.getString("productName") + "\nHK$" + product.getString("price");
+                        productList[i] = product.getString("productName") + "\nHK$" + product.getString("price");
                     }
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
