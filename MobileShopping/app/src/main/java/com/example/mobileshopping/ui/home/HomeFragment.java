@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment {
     int[] displayedProductId;
     Spinner spin;
     String[] productType = {"All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
-    LinearLayout linearLayoutHome;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +72,6 @@ public class HomeFragment extends Fragment {
                 //textView.setText(s);
             }
         });
-        linearLayoutHome = root.findViewById(R.id.linearLayoutHome);
         edSearch = root.findViewById(R.id.edSearch);
         btnSearch = root.findViewById(R.id.ibtnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {

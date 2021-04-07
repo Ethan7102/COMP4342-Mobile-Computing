@@ -7,7 +7,6 @@
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
-        android:id="@+id/linearLayoutHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
