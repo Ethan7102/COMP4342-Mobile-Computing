@@ -1,17 +1,21 @@
 package com.example.mobileshopping.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +43,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 public class HomeFragment extends Fragment {
 
     HomeViewModel homeViewModel;
@@ -53,6 +59,7 @@ public class HomeFragment extends Fragment {
     int[] displayedProductId;
     Spinner spin;
     String[] productType = {"All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
+    LinearLayout linearLayoutHome;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +73,7 @@ public class HomeFragment extends Fragment {
                 //textView.setText(s);
             }
         });
+        linearLayoutHome = root.findViewById(R.id.linearLayoutHome);
         edSearch = root.findViewById(R.id.edSearch);
         btnSearch = root.findViewById(R.id.ibtnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +113,8 @@ public class HomeFragment extends Fragment {
                     } else {
                         lvProducts.setAdapter(null);
                     }
+                    spin.setSelection(0);
+                    ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(edSearch.getWindowToken(), 0);
                 }
             }
         });
