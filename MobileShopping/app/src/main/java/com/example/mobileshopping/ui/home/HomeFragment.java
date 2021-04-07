@@ -60,10 +60,11 @@ public class HomeFragment extends Fragment {
     EditText edSearch;
     ListView lvProducts;
     String[] productList;
-    Product[] productObjList;
     HttpURLConnection con;
     JSONObject jObj;
     JSONArray products;
+    int numOfDisplayedProducts;
+    int[] displayedProductId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -123,13 +124,23 @@ public class HomeFragment extends Fragment {
             //process JSON
             jObj = new JSONObject(result);
             products = jObj.getJSONArray("products");
-            productList = new String[products.length()];
-            productObjList = new Product[products.length()];
+            numOfDisplayedProducts = 0;
             for (int i = 0; i < products.length(); i++) {
                 JSONObject product = products.getJSONObject(i);
-                productList[i] = product.getString("productName") + "\nHK$" + product.getString("price");
+                if (product.getInt("promotion") == 1)
+                    numOfDisplayedProducts++;
             }
+            productList = new String[numOfDisplayedProducts];
+            displayedProductId = new int[numOfDisplayedProducts];
+            numOfDisplayedProducts = 0;
+            for (int i = 0; i < products.length(); i++) {
+                JSONObject product = products.getJSONObject(i);
+                if (product.getInt("promotion") == 1) {
+                    displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
 
+                }
+            }
             //save product list
             //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
@@ -146,14 +157,24 @@ public class HomeFragment extends Fragment {
             SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
             String str = sharedPref.getString("jsonProductList", "null");
             if (str != "null") {
-                System.out.println(str);
                 try {
                     jObj = new JSONObject(str);
                     products = jObj.getJSONArray("products");
-                    productList = new String[products.length()];
+                    numOfDisplayedProducts = 0;
                     for (int i = 0; i < products.length(); i++) {
                         JSONObject product = products.getJSONObject(i);
-                        productList[i] = product.getString("productName") + "\nHK$" + product.getString("price");
+                        if (product.getInt("promotion") == 1)
+                            numOfDisplayedProducts++;
+                    }
+                    productList = new String[numOfDisplayedProducts];
+                    displayedProductId = new int[numOfDisplayedProducts];
+                    numOfDisplayedProducts = 0;
+                    for (int i = 0; i < products.length(); i++) {
+                        JSONObject product = products.getJSONObject(i);
+                        if (product.getInt("promotion") == 1) {
+                            displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                            productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                        }
                     }
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
@@ -171,7 +192,7 @@ public class HomeFragment extends Fragment {
     private AdapterView.OnItemClickListener onClickListView = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            System.out.println(displayedProductId[(int) id]);
         }
     };
 }

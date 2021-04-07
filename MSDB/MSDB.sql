@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `produceID` int NOT NULL,
+  `productID` int NOT NULL,
   `type` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `brand` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `productName` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `product` (
   `price` int DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   `promotion` tinyint DEFAULT NULL,
-  PRIMARY KEY (`produceID`)
+  PRIMARY KEY (`productID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -82,6 +82,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+
 --
 -- Table structure for table `orderDetail`
 --
@@ -96,7 +97,7 @@ CREATE TABLE `orderDetail` (
   PRIMARY KEY (`orderID`,`productID`),
   KEY `fk_productID_idx` (`productID`),
   CONSTRAINT `fk_orderID` FOREIGN KEY (`orderID`) REFERENCES `order` (`orderID`),
-  CONSTRAINT `fk_productID` FOREIGN KEY (`productID`) REFERENCES `product` (`produceID`)
+  CONSTRAINT `fk_productID` FOREIGN KEY (`productID`) REFERENCES `product` (`productID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,4 +110,4 @@ LOCK TABLES `orderDetail` WRITE;
 /*!40000 ALTER TABLE `orderDetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
--- Dump completed on 2021-04-07 13:20:14
+-- Dump completed on 2021-04-07 13:58:36
