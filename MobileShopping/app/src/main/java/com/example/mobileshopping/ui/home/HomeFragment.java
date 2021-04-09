@@ -178,7 +178,6 @@ public class HomeFragment extends Fragment {
                     } else {
                         lvProducts.setAdapter(null);
                     }
-                    edSearch.setText("");
                 }
             }
 
