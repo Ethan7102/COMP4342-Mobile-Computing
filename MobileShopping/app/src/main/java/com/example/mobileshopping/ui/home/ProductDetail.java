@@ -10,6 +10,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
 
@@ -32,38 +33,42 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
     private RequestQueue queue;
     String productName, productDescription, type;
     int id, price, quantity, quantityOfCart=1;
-
+    TextView tv_quantityOfCart, tv_name, tv_description, tv_price, tv_type;
+    Button addCart, addQuantityOfCart, subQuantityOfCart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         queue = VolleySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
-        TextView tv_name=findViewById(R.id.tv_name);
-        TextView tv_description=findViewById(R.id.tv_description);
-        TextView tv_price = findViewById(R.id.tv_price);
-        TextView tv_quantityOfCart = findViewById(R.id.tv_quan);
-        Button addCart = findViewById(R.id.btn_addCart);
-        Button addQuantityOfCart = findViewById(R.id.btn_add);
-        Button subQuantityOfCart = findViewById(R.id.btn_sub);
+        tv_name=findViewById(R.id.tv_name);
+        tv_description=findViewById(R.id.tv_description);
+        tv_price = findViewById(R.id.tv_price);
+        tv_quantityOfCart = findViewById(R.id.tv_quan);
+        tv_type = findViewById(R.id.tv_type);
+        addCart = findViewById(R.id.btn_addCart);
+        addQuantityOfCart = findViewById(R.id.btn_add);
+        subQuantityOfCart = findViewById(R.id.btn_sub);
         addCart.setOnClickListener(this);
         addQuantityOfCart.setOnClickListener(this);
         subQuantityOfCart.setOnClickListener(this);
         Intent intent=getIntent();
         id=intent.getIntExtra("id", 0);
-        tv_quantityOfCart.setText(quantityOfCart);
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST, url, null,
-                response -> {
-                    try {
-                        productName = response.getString("type");
-                        productDescription = response.getString("productDescription");
-                        type = response.getString("type");
-                        price = response.getInt("price");
-                        quantity = response.getInt("quantity");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+        Log.i("response", String.valueOf(id));
+        tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("response", response);
+                try {
+                    JSONObject product = new JSONObject(response);
+                    productName = product.getString("productName");
+                    productDescription = product.getString("productDescription");
+                    type = product.getString("type");
+                    price = product.getInt("price");
+                    quantity = product.getInt("quantity");
                     tv_name.setText(productName);
                     tv_price.setText("$" + price);
+                    tv_type.setText(type);
                     tv_description.setText(productDescription);
                     if(quantity>0) {
                         addCart.setEnabled(true);
@@ -72,10 +77,15 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                         addCart.setEnabled(false);
                         addCart.setText(R.string.no_stone);
                     }
-                }, error -> {
-                    error.printStackTrace();
-                    tv_name.setText("That didn't work!");
-                })
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, (VolleyError error) -> {
+            error.printStackTrace();
+            tv_name.setText("That didn't work!");
+        })
         {
             @Override
             protected Map<String,String> getParams(){
@@ -90,7 +100,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 return params;
             }
         };
-        queue.add(stringRequest);
+        queue.add(stringRequest );
     }
 
     public void onClick(View v) {
@@ -107,11 +117,13 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 if(quantityOfCart<quantity) {
                     quantityOfCart++;
                 }
+                tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
                 break;
             case R.id.btn_sub:
                 if(quantityOfCart>0) {
                     quantityOfCart--;
                 }
+                tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
                 break;
         }
     }
