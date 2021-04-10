@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
     int numOfDisplayedProducts;
     int[] displayedProductId;
     Spinner spin;
-    String[] productType = {"All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
+    String[] productType = {"Promotion", "All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
                     } else {
                         lvProducts.setAdapter(null);
                     }
-                    spin.setSelection(0);
+                    spin.setSelection(1);
                     ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(edSearch.getWindowToken(), 0);
                 }
             }
@@ -134,20 +134,36 @@ public class HomeFragment extends Fragment {
                         productList = null;
                         jObj = new JSONObject(str);
                         products = jObj.getJSONArray("products");
-                        numOfDisplayedProducts = getNumOfSuitableItem(products, "type", parent.getItemAtPosition(position).toString(), "");
-                        if (numOfDisplayedProducts != 0) {
-                            productList = new String[numOfDisplayedProducts];
-                            displayedProductId = new int[numOfDisplayedProducts];
-                            numOfDisplayedProducts = 0;
-                            for (int i = 0; i < products.length(); i++) {
-                                JSONObject product = products.getJSONObject(i);
-                                if (parent.getItemAtPosition(position).toString().equals("All Product")) {
-                                    displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
-                                } else {
-                                    if (product.getString("type").equals(parent.getItemAtPosition(position).toString())) {
+                        if (parent.getItemAtPosition(position).toString().equals("Promotion")) {
+                            numOfDisplayedProducts = getNumOfSuitableItem(products, "promotion", "", "");
+                            if (numOfDisplayedProducts != 0) {
+                                productList = new String[numOfDisplayedProducts];
+                                displayedProductId = new int[numOfDisplayedProducts];
+                                numOfDisplayedProducts = 0;
+                                for (int i = 0; i < products.length(); i++) {
+                                    JSONObject product = products.getJSONObject(i);
+                                    if (product.getInt("promotion") == 1) {
                                         displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
                                         productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                    }
+                                }
+                            }
+                        } else {
+                            numOfDisplayedProducts = getNumOfSuitableItem(products, "type", parent.getItemAtPosition(position).toString(), "");
+                            if (numOfDisplayedProducts != 0) {
+                                productList = new String[numOfDisplayedProducts];
+                                displayedProductId = new int[numOfDisplayedProducts];
+                                numOfDisplayedProducts = 0;
+                                for (int i = 0; i < products.length(); i++) {
+                                    JSONObject product = products.getJSONObject(i);
+                                    if (parent.getItemAtPosition(position).toString().equals("All Product")) {
+                                        displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                    } else {
+                                        if (product.getString("type").equals(parent.getItemAtPosition(position).toString())) {
+                                            displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
+                                            productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                        }
                                     }
                                 }
                             }
