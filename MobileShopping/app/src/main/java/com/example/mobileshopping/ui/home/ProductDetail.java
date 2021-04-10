@@ -28,7 +28,8 @@ import java.util.Map;
 
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
 
-    String url ="http://192.168.1.4/productDetail.php";
+    String url ="http://192.168.1.31/productDetail.php"; //Angus network
+    //String url ="http://192.168.1.4/productDetail.php";
     private RequestQueue queue;
     String productName, productDescription, type;
     int id, price, quantity, quantityOfCart=1;
