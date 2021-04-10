@@ -99,7 +99,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 return params;
             }
         };
-        queue.add(stringRequest );
+        queue.add(stringRequest);
     }
 
     public void onClick(View v) {
@@ -111,7 +111,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                         .putInt(String.valueOf(id), quantityOfCart+productInCart)
                         .apply();
                 Log.i("Cart item", String.valueOf(quantityOfCart+productInCart));
-                Toast.makeText(this, productName+" "+R.string.add_to_cart, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, productName+" "+getResources().getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_add:
                 if(quantityOfCart<quantity) {

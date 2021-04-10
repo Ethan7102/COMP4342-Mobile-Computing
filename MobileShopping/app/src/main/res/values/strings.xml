@@ -3,6 +3,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Shopping Cart</string>
     <string name="title_notifications">Order</string>
-    <string name="add_to_cart">Add to cart</string>
-    <string name="no_stone">No stone</string>
+    <string name="add_to_cart">add to cart</string>
+    <string name="no_stone">no stone</string>
 </resources>
