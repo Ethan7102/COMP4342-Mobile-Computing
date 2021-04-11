@@ -2,6 +2,7 @@ package com.example.mobileshopping.ui.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -298,7 +299,10 @@ public class HomeFragment extends Fragment {
     private AdapterView.OnItemClickListener onClickListView = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            System.out.println(displayedProductId[(int) id]);
+            //System.out.println(displayedProductId[(int) id]);
+            Intent i = new Intent(getActivity(), ProductDetail.class);
+            i.putExtra("id", displayedProductId[(int) id]);
+            startActivity(i);
         }
     };
 
