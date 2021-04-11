@@ -364,7 +364,6 @@ public class HomeFragment extends Fragment {
             productsStr = productsStr.substring(0, productsStr.length() - 1);
             productsStr += "]}";
             jsonStr += productsStr;
-            System.out.println(jsonStr);
             filtedProducts = jsonStr;
         }
     }
