@@ -1,10 +1,20 @@
 package com.example.mobileshopping.ui.notifications;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.net.Uri;
+import android.content.Intent;
+import android.content.ActivityNotFoundException;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +23,16 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mobileshopping.R;
+import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class NotificationsFragment extends Fragment {
+
+    TextView txtEmail;
+    ListView lvOrder;
+    MaterialButton btnConfirm;
 
     private NotificationsViewModel notificationsViewModel;
 
@@ -23,13 +41,39 @@ public class NotificationsFragment extends Fragment {
         notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
+        //final TextView textView = root.findViewById(R.id.text_notifications);
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                //textView.setText(s);
             }
         });
+
+        txtEmail = root.findViewById(R.id.txtEmail);
+        lvOrder = root.findViewById(R.id.lvOrder);
+        btnConfirm = root.findViewById(R.id.btnConfirm);
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = txtEmail.getText().toString();
+                System.out.println(email);
+
+                String mailto = "mailto:" + email +
+                        "?cc=" +
+                        "&subject=" + Uri.encode("your subject") +
+                        "&body=" + Uri.encode("your mail body");
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse(mailto));
+
+                try {
+                    startActivity(emailIntent);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(getContext(), "Error to open email app", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return root;
     }
 }
