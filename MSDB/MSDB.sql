@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `order`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `order` (
-  `orderID` int NOT NULL,
+  `orderID` int NOT NULL AUTO_INCREMENT,
   `confirmationCode` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `address` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,

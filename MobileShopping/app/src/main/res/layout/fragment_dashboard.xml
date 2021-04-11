@@ -12,61 +12,38 @@
         android:background="#ededed"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="#ffffff"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_titlebar_center"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLength="18"
-                android:singleLine="true"
-                android:text="Shopping Cart"
-                android:textColor="#1a1a1a"
-                android:textSize="17dp"
-                android:visibility="visible" />
-
-        </RelativeLayout>
-
         <ListView
+            android:id="@+id/lv_1"
             android:layout_width="match_parent"
             android:layout_height="534dp">
 
         </ListView>
 
-        <RelativeLayout
+        <EditText
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="#ffffff"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            android:textSize="24sp" />
 
-            <EditText
-                android:id="@+id/editTextTextPersonName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="TextView"
+            android:textAlignment="textEnd"
+            android:textSize="24sp" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-        </RelativeLayout>
+        <Button
+            android:id="@+id/btn_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="ORDER"
+            android:textSize="24sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

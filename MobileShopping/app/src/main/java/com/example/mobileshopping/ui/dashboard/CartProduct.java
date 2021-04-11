@@ -5,6 +5,7 @@ public class CartProduct {
     private int id;
     private int price;
     private int quantity;
+    private int stone;
 
     public CartProduct(){}
     public CartProduct(String name, int id, int price, int quantity) {
@@ -43,5 +44,13 @@ public class CartProduct {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getStone() {
+        return stone;
+    }
+
+    public void setStone(int stone) {
+        this.stone = stone;
     }
 }
