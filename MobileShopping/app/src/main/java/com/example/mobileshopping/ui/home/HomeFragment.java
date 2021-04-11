@@ -220,7 +220,7 @@ public class HomeFragment extends Fragment {
                 }
             };
             Future<?> f = service.submit(r);
-            f.get(2, TimeUnit.SECONDS); //if the connection cannot completes with in 2 seconds, a TimeroutException will be throw.
+            f.get(1, TimeUnit.SECONDS); //if the connection cannot completes with in 1 seconds, a TimeroutException will be throw.
 
             inputStream = con.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
