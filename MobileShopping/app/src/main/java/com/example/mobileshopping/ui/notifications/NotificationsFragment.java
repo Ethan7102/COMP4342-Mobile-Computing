@@ -3,6 +3,8 @@ package com.example.mobileshopping.ui.notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +30,25 @@ import com.google.android.material.button.MaterialButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+
 public class NotificationsFragment extends Fragment {
 
     TextView txtEmail;
     ListView lvOrder;
     MaterialButton btnConfirm;
+    HttpURLConnection con;
+
 
     private NotificationsViewModel notificationsViewModel;
 
@@ -73,6 +89,50 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         });
+
+        URL url = null;
+        InputStream inputStream = null;
+        String result = "";
+
+        try{
+            url = new URL("http://192.168.1.11/webServer/COMP4342-Mobile-Computing/orderDetail.php");
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            Log.d("connectServer", "process start");
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        con.connect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            Future<?> f = service.submit(r);
+            f.get(1, TimeUnit.SECONDS); //if the connection cannot completes with in 1 seconds, a TimeroutException will be throw.
+
+            inputStream = con.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                result += line;
+            }
+            Log.d("connectServer", "process complete");
+            inputStream.close();
+
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
 
         return root;
     }
