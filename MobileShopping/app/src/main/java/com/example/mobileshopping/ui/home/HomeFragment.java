@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
     int[] displayedProductId;
     Spinner spin;
     String[] productType = {"Promotion", "All Product", "Chassis", "CPU", "Display Card", "Internal Optical Drives", "Internal HDD", "SSD", "Motherboard", "Power Supply", "RAM", "RAID Card", "Sound Card"};
+    String filtedProducts = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -80,12 +81,14 @@ public class HomeFragment extends Fragment {
                 String keyword = edSearch.getText().toString();
                 System.out.println(keyword);
 
-                SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
-                String str = sharedPref.getString("jsonProductList", "null");
-                if (str != "null") {
+                //SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+                //String str = sharedPref.getString("jsonProductList", "null");
+
+                if (filtedProducts != null) {
                     try {
+                        System.out.println(filtedProducts);
                         productList = null;
-                        jObj = new JSONObject(str);
+                        jObj = new JSONObject(filtedProducts);
                         products = jObj.getJSONArray("products");
                         numOfDisplayedProducts = getNumOfSuitableItem(products, "productName", "", keyword);
                         //                    if (product.getString(key).contains(keyword))
@@ -111,7 +114,7 @@ public class HomeFragment extends Fragment {
                     } else {
                         lvProducts.setAdapter(null);
                     }
-                    spin.setSelection(1);
+                    //spin.setSelection(1);
                     ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(edSearch.getWindowToken(), 0);
                 }
             }
@@ -124,9 +127,6 @@ public class HomeFragment extends Fragment {
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                /*Toast.makeText(parent.getContext(),
-                        "OnItemSelectedListener : " + parent.getItemAtPosition(position).toString(),
-                        Toast.LENGTH_SHORT).show();*/
                 SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
                 String str = sharedPref.getString("jsonProductList", "null");
                 if (str != "null") {
@@ -148,6 +148,7 @@ public class HomeFragment extends Fragment {
                                     }
                                 }
                             }
+                            editFilteredProducts(products, "promotion");
                         } else {
                             numOfDisplayedProducts = getNumOfSuitableItem(products, "type", parent.getItemAtPosition(position).toString(), "");
                             if (numOfDisplayedProducts != 0) {
@@ -167,6 +168,7 @@ public class HomeFragment extends Fragment {
                                     }
                                 }
                             }
+                            editFilteredProducts(products, parent.getItemAtPosition(position).toString());
                         }
                     } catch (JSONException jsonException) {
                         jsonException.printStackTrace();
@@ -178,6 +180,7 @@ public class HomeFragment extends Fragment {
                     } else {
                         lvProducts.setAdapter(null);
                     }
+                    edSearch.setText("");
                 }
             }
 
@@ -194,8 +197,8 @@ public class HomeFragment extends Fragment {
         URL url = null;
         try {
             //specific ip address
-            url = new URL("http://192.168.1.31/getProducts.php"); //Angus network
-            //url = new URL("http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getProducts.php");
+            //url = new URL("http://192.168.1.31/getProducts.php"); //Angus network
+            url = new URL("http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getProducts.php"); //Ethan network
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             Log.d("connectServer", "process start");
@@ -242,7 +245,6 @@ public class HomeFragment extends Fragment {
                         productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
                     }
                 }
-
                 //save product list
                 SharedPreferences.Editor prefEditor = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE).edit();
                 prefEditor.putString("jsonProductList", result);
@@ -272,11 +274,18 @@ public class HomeFragment extends Fragment {
                                 productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
                             }
                         }
+
                     }
                 } catch (JSONException jsonException) {
                     jsonException.printStackTrace();
                 }
             }
+        }
+        //save filtered products
+        try {
+            editFilteredProducts(products, "promotion");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         if (productList != null) {
             ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, productList);
@@ -317,6 +326,47 @@ public class HomeFragment extends Fragment {
             }
         }
         return num;
+    }
+
+    private void editFilteredProducts(JSONArray products, String type) throws JSONException {
+        String jsonStr = "{\"products\":[";
+        String productsStr = "";
+        if (type.equals("All Product")) {
+            SharedPreferences sharedPref = getActivity().getSharedPreferences("appData", Context.MODE_PRIVATE);
+            String str = sharedPref.getString("jsonProductList", "null");
+            jsonStr = str;
+        } else {
+            for (int i = 0; i < products.length(); i++) {
+                JSONObject product = products.getJSONObject(i);
+                if (type.equals("promotion")) {
+                    if (product.getInt("promotion") == 1) {
+                        productsStr += "{\"productID\":\"" + product.getString("productID") + "\",\"type\":\"" + product.getString("type") +
+                                "\",\"brand\":\"" + product.getString("brand") + "\",\"productName\":\"" + product.getString("productName") +
+                                "\",\"productDescription\":\"" + product.getString("productDescription") + "\",\"price\":\"" + product.getString("price") +
+                                "\",\"quantity\":\"" + product.getString("quantity") + "\",\"promotion\":\"" + product.getString("promotion") + "\"},";
+                    }
+                } else {
+                    if (product.getString("type").equals(type)) {
+                        productsStr += "{\"productID\":\"" + product.getString("productID") + "\",\"type\":\"" + product.getString("type") +
+                                "\",\"brand\":\"" + product.getString("brand") + "\",\"productName\":\"" + product.getString("productName") +
+                                "\",\"productDescription\":\"" + product.getString("productDescription") + "\",\"price\":\"" + product.getString("price") +
+                                "\",\"quantity\":\"" + product.getString("quantity") + "\",\"promotion\":\"" + product.getString("promotion") + "\"},";
+                    }
+                }
+            }
+        }
+        if (productsStr.equals("")) {
+            if (type.equals("All Product"))
+                filtedProducts = jsonStr;
+            else
+                filtedProducts = null;
+        } else {
+            productsStr = productsStr.substring(0, productsStr.length() - 1);
+            productsStr += "]}";
+            jsonStr += productsStr;
+            System.out.println(jsonStr);
+            filtedProducts = jsonStr;
+        }
     }
 }
 
