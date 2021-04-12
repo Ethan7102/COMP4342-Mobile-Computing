@@ -29,8 +29,8 @@ import java.util.Map;
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
 
     //String url ="http://192.168.1.31/productDetail.php"; //Angus network
-    //String url ="http://192.168.1.4/productDetail.php";
-    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/productDetail.php"; //Ethan network
+    String url ="http://192.168.1.5/productDetail.php";
+    //String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/productDetail.php"; //Ethan network
     private RequestQueue queue;
     String productName, productDescription, type;
     int id, price, quantity, quantityOfCart=1;
@@ -50,6 +50,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         addQuantityOfCart = findViewById(R.id.btn_add);
         subQuantityOfCart = findViewById(R.id.btn_sub);
         addCart.setOnClickListener(this);
+        addCart.setEnabled(false);
         addQuantityOfCart.setOnClickListener(this);
         subQuantityOfCart.setOnClickListener(this);
         Intent intent=getIntent();
@@ -76,6 +77,8 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                         addCart.setText(R.string.add_to_cart);
                     } else {
                         addCart.setEnabled(false);
+                        quantityOfCart=0;
+                        tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
                         addCart.setText(R.string.no_stone);
                     }
                 } catch (JSONException e) {
@@ -122,7 +125,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
                 break;
             case R.id.btn_sub:
-                if(quantityOfCart>0) {
+                if(quantityOfCart>1) {
                     quantityOfCart--;
                 }
                 tv_quantityOfCart.setText(String.valueOf(quantityOfCart));

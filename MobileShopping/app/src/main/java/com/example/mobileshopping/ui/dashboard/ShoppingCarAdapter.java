@@ -3,6 +3,7 @@ package com.example.mobileshopping.ui.dashboard;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +77,9 @@ public class ShoppingCarAdapter extends BaseAdapter {
                     public void onClick(View v) {
                         data.get(position).setQuantity(data.get(position).getQuantity()-1);
                         if(data.get(position).getQuantity()==0) {
-                            cart.edit().remove(String.valueOf(data.get(position).getId()));
+                            cart.edit().remove(String.valueOf(data.get(position).getId())).apply();
                             data.remove(position);
+                            notifyDataSetChanged();
                         } else {
                             buy_number.setText("" + data.get(position).getQuantity());
                             cart.edit().putInt(String.valueOf(data.get(position).getId()), data.get(position).getQuantity()).apply();
