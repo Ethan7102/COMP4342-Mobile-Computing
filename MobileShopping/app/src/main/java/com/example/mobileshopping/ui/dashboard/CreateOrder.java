@@ -27,7 +27,7 @@ import java.util.Map;
 public class CreateOrder extends AppCompatActivity {
     TextView tv_email, tv_code, tv_status;
     private RequestQueue queue;
-    String url = APIUrl.url+"sendOrder.php";
+    String url = APIUrl.url+"/sendOrder.php";
     String email;
     SharedPreferences cart;
     @Override
