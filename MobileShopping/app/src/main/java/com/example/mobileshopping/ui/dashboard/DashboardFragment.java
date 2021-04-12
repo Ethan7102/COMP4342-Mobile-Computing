@@ -25,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
 import com.example.mobileshopping.ui.home.HomeFragment;
@@ -51,8 +52,7 @@ public class DashboardFragment extends Fragment {
     Button btn_order;
     TextView tv_amount;
     EditText et_email;
-    //String url="http://192.168.1.5/getCartProduct.php";
-    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getCartProduct.php"; //Ethan network
+    String url = APIUrl.url+"/getCartProduct.php";
     SharedPreferences cart;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -82,6 +82,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Log.i("response", response);
+                data.clear();
                 try {
                     JSONArray productArray = new JSONArray(response);
                     for(int i=0;i<productArray.length();i++) {
@@ -122,12 +123,6 @@ public class DashboardFragment extends Fragment {
                 params.put("idList", jsonObject.toString());
                 return params;
             }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
         };
         queue.add(stringRequest);
     }
@@ -138,12 +133,14 @@ public class DashboardFragment extends Fragment {
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!et_email.getText().toString().matches("")) {
+                if(et_email.getText().toString().matches("")) {
+                    Toast.makeText(getActivity(), "Email cannot be null", Toast.LENGTH_SHORT).show();
+                } else if(cart.getAll().isEmpty()) {
+                    Toast.makeText(getActivity(), "No product inside the shopping cart", Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intent=new Intent(getActivity(), CreateOrder.class);
                     intent.putExtra("email", et_email.getText().toString());
                     startActivity(intent);
-                } else {
-                    Toast.makeText(getActivity(), "Email cannot be null", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -154,5 +151,14 @@ public class DashboardFragment extends Fragment {
             amount+=d.getPrice()*d.getQuantity();
         }
         return amount;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(shoppingCarAdapter!=null && cart.getAll().isEmpty()) {
+            data.clear();
+            et_email.setText("");
+            shoppingCarAdapter.notifyDataSetChanged();
+        }
     }
 }

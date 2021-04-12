@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 
 import org.json.JSONArray;
@@ -198,9 +199,7 @@ public class HomeFragment extends Fragment {
         URL url = null;
         try {
             //specific ip address
-            url = new URL("http://192.168.1.5/getProducts.php");
-            //url = new URL("http://192.168.1.31/getProducts.php"); //Angus network
-            //url = new URL("http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getProducts.php"); //Ethan network
+            url = new URL(APIUrl.url+"/getProducts.php");
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             Log.d("connectServer", "process start");

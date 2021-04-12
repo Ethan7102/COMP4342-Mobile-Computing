@@ -13,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
 
@@ -26,8 +27,7 @@ import java.util.Map;
 public class CreateOrder extends AppCompatActivity {
     TextView tv_email, tv_code, tv_status;
     private RequestQueue queue;
-    //String url="http://192.168.1.5/sendOrder.php";
-    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/sendOrder.php"; //Ethan network
+    String url = APIUrl.url+"sendOrder.php";
     String email;
     SharedPreferences cart;
     @Override
@@ -52,7 +52,15 @@ public class CreateOrder extends AppCompatActivity {
                     JSONObject inform = new JSONObject(response);
                     tv_email.setText(inform.getString("email"));
                     tv_code.setText(inform.getString("code"));
-                    tv_status.setText("Success!, The order has been accepted, keep the email and confirmation code to check the order");
+                    String status = inform.getString("status");
+                    if(status.equals("success")) {
+                        tv_status.setText("Success!\nThe order has been accepted,keep the email and confirmation code to check the order");
+                        cart.edit().clear().apply();
+                    } else {
+                        tv_email.setText("");
+                        tv_code.setText("Error");
+                        tv_status.setText("Failed!\nSomething happened.Please try again later");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tv_email.setText("");
@@ -84,12 +92,6 @@ public class CreateOrder extends AppCompatActivity {
                 Log.i("response", email);
                 params.put("idQuantity", jsonObject.toString());
                 Log.i("response", jsonObject.toString());
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
                 return params;
             }
         };

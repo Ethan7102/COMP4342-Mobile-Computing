@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.android.volley.BuildConfig;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
 
@@ -28,9 +30,7 @@ import java.util.Map;
 
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
 
-    //String url ="http://192.168.1.31/productDetail.php"; //Angus network
-    String url ="http://192.168.1.5/productDetail.php";
-    //String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/productDetail.php"; //Ethan network
+    String url = APIUrl.url+"/productDetail.php";
     private RequestQueue queue;
     String productName, productDescription, type;
     int id, price, quantity, quantityOfCart=1;
@@ -97,12 +97,6 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                 params.put("id",String.valueOf(id));
                 return params;
             }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String,String> params = new HashMap<>();
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
         };
         queue.add(stringRequest);
     }
@@ -117,6 +111,7 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
                         .apply();
                 Log.i("Cart item", String.valueOf(quantityOfCart+productInCart));
                 Toast.makeText(this, productName+" "+getResources().getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             case R.id.btn_add:
                 if(quantityOfCart<quantity) {
