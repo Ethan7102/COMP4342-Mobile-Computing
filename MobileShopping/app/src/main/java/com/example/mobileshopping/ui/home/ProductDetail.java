@@ -30,13 +30,8 @@ import java.util.Map;
 
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
 
-<<<<<<< Updated upstream
+
     String url = APIUrl.url+"/productDetail.php";
-=======
-    //String url ="http://192.168.1.31/productDetail.php"; //Angus network
-    //String url ="http://192.168.1.5/productDetail.php";
-    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/productDetail.php"; //Ethan network
->>>>>>> Stashed changes
     private RequestQueue queue;
     String productName, productDescription, type;
     int id, price, quantity, quantityOfCart=1;
