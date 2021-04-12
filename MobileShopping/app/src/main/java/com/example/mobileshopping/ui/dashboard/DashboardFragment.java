@@ -51,7 +51,8 @@ public class DashboardFragment extends Fragment {
     Button btn_order;
     TextView tv_amount;
     EditText et_email;
-    String url="http://192.168.1.5/getCartProduct.php";
+    //String url="http://192.168.1.5/getCartProduct.php";
+    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getCartProduct.php"; //Ethan network
     SharedPreferences cart;
 
     public View onCreateView(@NonNull LayoutInflater inflater,

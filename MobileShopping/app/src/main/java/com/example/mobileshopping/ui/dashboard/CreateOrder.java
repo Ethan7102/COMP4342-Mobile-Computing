@@ -26,7 +26,8 @@ import java.util.Map;
 public class CreateOrder extends AppCompatActivity {
     TextView tv_email, tv_code, tv_status;
     private RequestQueue queue;
-    String url="http://192.168.1.5/sendOrder.php";
+    //String url="http://192.168.1.5/sendOrder.php";
+    String url ="http://192.168.1.11/webServer/COMP4342-Mobile-Computing/sendOrder.php"; //Ethan network
     String email;
     SharedPreferences cart;
     @Override
