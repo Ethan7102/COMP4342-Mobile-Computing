@@ -15,7 +15,7 @@
         <ListView
             android:id="@+id/lv_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="400dp">
 
         </ListView>
 
@@ -23,6 +23,7 @@
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:ems="10"
             android:hint="Email"
             android:inputType="textPersonName"
@@ -32,7 +33,7 @@
             android:id="@+id/tv_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
+            android:layout_weight="0"
             android:text="TextView"
             android:textAlignment="textEnd"
             android:textSize="24sp" />
@@ -42,8 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:layout_weight="0"
             android:text="ORDER"
             android:textSize="24sp" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
