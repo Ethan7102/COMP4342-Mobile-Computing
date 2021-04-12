@@ -199,7 +199,13 @@ public class HomeFragment extends Fragment {
         URL url = null;
         try {
             //specific ip address
+<<<<<<< Updated upstream
             url = new URL(APIUrl.url+"/getProducts.php");
+=======
+            //url = new URL("http://192.168.1.5/getProducts.php");
+            //url = new URL("http://192.168.1.31/getProducts.php"); //Angus network
+            url = new URL("http://192.168.1.11/webServer/COMP4342-Mobile-Computing/getProducts.php"); //Ethan network
+>>>>>>> Stashed changes
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             Log.d("connectServer", "process start");
