@@ -30,6 +30,7 @@ import java.util.Map;
 
 public class ProductDetail extends AppCompatActivity implements View.OnClickListener {
 
+
     String url = APIUrl.url+"/productDetail.php";
     private RequestQueue queue;
     String productName, productDescription, type;

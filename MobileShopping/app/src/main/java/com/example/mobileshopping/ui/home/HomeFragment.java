@@ -198,7 +198,6 @@ public class HomeFragment extends Fragment {
         String result = "";
         URL url = null;
         try {
-            //specific ip address
             url = new URL(APIUrl.url+"/getProducts.php");
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
