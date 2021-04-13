@@ -1,8 +1,11 @@
 <?php include 'dbconnect.php';
 	$email=$_POST['email'];
 	$code=rand(100000, 999999);
+	$status="success";
 	$sql_insert="INSERT INTO `order` (`confirmationCode`, `email`) VALUES ('$code', '$email');";
-	$link->query($sql_insert) or die($link->error);
+	if(!$link->query($sql_insert)){
+		$status=fail;
+	}
 	$orderID = $link->insert_id;
 	$sql_detail="INSERT INTO orderDetail (orderID, productID, quantity) VALUES";
 	$obj=json_decode($_POST['idQuantity'], true);
@@ -17,10 +20,13 @@
 			$sql_detail.=",";
 		}
 	}
-	$link->query($sql_detail) or die($link->error);
+	if(!$link->query($sql_detail)){
+		$status=fail;
+	}
 	$array=array(
 		"email" => $email,
 		"code" => $code,
+		"status" => $status,
 	);
 		
 	echo json_encode($array, JSON_UNESCAPED_UNICODE);
