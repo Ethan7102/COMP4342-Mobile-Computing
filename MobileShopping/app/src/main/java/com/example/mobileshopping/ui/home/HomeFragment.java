@@ -282,10 +282,12 @@ public class HomeFragment extends Fragment {
             }
         }
         //save filtered products
-        try {
-            editFilteredProducts(products, "promotion");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(products!=null) {
+            try {
+                editFilteredProducts(products, "promotion");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         if (productList != null) {
             ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, productList);
