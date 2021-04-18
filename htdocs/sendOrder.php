@@ -4,7 +4,7 @@
 	$status="success";
 	$sql_insert="INSERT INTO `order` (`confirmationCode`, `email`) VALUES ('$code', '$email');";
 	if(!$link->query($sql_insert)){
-		$status=fail;
+		$status="fail";
 	}
 	$orderID = $link->insert_id;
 	$sql_detail="INSERT INTO orderDetail (orderID, productID, quantity) VALUES";
@@ -21,7 +21,7 @@
 		}
 	}
 	if(!$link->query($sql_detail)){
-		$status=fail;
+		$status="fail";
 	}
 	$array=array(
 		"email" => $email,
