@@ -52,6 +52,7 @@ public class NotificationsFragment extends Fragment {
     MaterialButton btnConfirm;
     HttpURLConnection con;
     JSONArray orders;
+    String[] orderList;
 
 
     private NotificationsViewModel notificationsViewModel;
@@ -125,8 +126,10 @@ public class NotificationsFragment extends Fragment {
                         String productName = order.optString("productName");
                         String price = order.optString("price");
                         String quantity = order.optString("quantity");
-
+                        orderList[i] = "Product Name: " + productName + "\nPrice: " + price + "\nQuantity: " + quantity;
                     }
+                    ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orderList);
+                    lvOrder.setAdapter(adapter);
                 }
                 catch (Exception e){
                     e.printStackTrace();
