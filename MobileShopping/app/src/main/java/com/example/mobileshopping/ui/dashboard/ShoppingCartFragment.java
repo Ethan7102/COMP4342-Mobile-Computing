@@ -132,9 +132,9 @@ public class ShoppingCartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(et_email.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(), "Email cannot be null", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Email cannot be null", Toast.LENGTH_SHORT).show();
                 } else if(cart.getAll().isEmpty()) {
-                    Toast.makeText(getActivity(), "No product inside the shopping cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getBaseContext(), "No product inside the shopping cart", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent=new Intent(getActivity(), CreateOrder.class);
                     intent.putExtra("email", et_email.getText().toString());
@@ -156,6 +156,7 @@ public class ShoppingCartFragment extends Fragment {
         if(shoppingCartAdapter !=null && cart.getAll().isEmpty()) {
             data.clear();
             et_email.setText("");
+            tv_amount.setText("HKD$0");
             shoppingCartAdapter.notifyDataSetChanged();
         }
     }
