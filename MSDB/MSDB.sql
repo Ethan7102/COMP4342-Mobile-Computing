@@ -29,6 +29,7 @@ CREATE TABLE `order` (
   `confirmationCode` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `address` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `status` varchar(45) COLLATE utf8mb4_general_ci DEFAULT 'in process',
   PRIMARY KEY (`orderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -81,7 +82,6 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-
 --
 -- Table structure for table `orderDetail`
 --
@@ -109,5 +109,4 @@ LOCK TABLES `orderDetail` WRITE;
 /*!40000 ALTER TABLE `orderDetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
-
--- Dump completed on 2021-04-12 15:37:23
+-- Dump completed on 2021-04-24 21:37:33
