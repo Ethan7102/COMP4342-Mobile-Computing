@@ -16,11 +16,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -29,6 +35,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -39,13 +47,13 @@ public class CheckOrderFragment extends Fragment {
 
     TextView txtEmail;
     TextView txtCode;
-    ListView lvOrder;
+    ListView lvOrderDetail;
     MaterialButton btnConfirm;
     HttpURLConnection con;
     JSONArray orders;
-    String[] orderList;
-
-
+    String[] orderDetailList;
+    private RequestQueue queue;
+    String url = APIUrl.url+"/orderDetail.php";
     private CheckOrderViewModel checkOrderViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -63,7 +71,7 @@ public class CheckOrderFragment extends Fragment {
 
         txtEmail = root.findViewById(R.id.txtEmail);
         txtCode = root.findViewById(R.id.txtCode);
-        lvOrder = root.findViewById(R.id.lvOrder);
+        lvOrderDetail = root.findViewById(R.id.lvOrder);
         btnConfirm = root.findViewById(R.id.btnConfirm);
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -71,13 +79,61 @@ public class CheckOrderFragment extends Fragment {
             public void onClick(View v) {
                 String email = txtEmail.getText().toString();
                 String code = txtCode.getText().toString();
-                System.out.println(email);
+                System.out.println(email+"  "+code);
 
-                URL url = null;
                 InputStream inputStream = null;
                 String result = "";
+                orderDetailList = new String[10];
+                orderDetailList[0] = "Product Name\t\tQty\tPrice\n";
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("response", response);
+                        try {
+                            JSONObject product = new JSONObject(response);
+                            System.out.println(response);
+                            /*
+                            productName = product.getString("productName");
+                            productDescription = product.getString("productDescription");
+                            type = product.getString("type");
+                            price = product.getInt("price");
+                            quantity = product.getInt("quantity");
+                            tv_name.setText(productName);
+                            tv_price.setText("$" + price);
+                            tv_type.setText(type);
+                            tv_description.setText(productDescription);
+                            if(quantity>0) {
+                                addCart.setEnabled(true);
+                                addCart.setText(R.string.add_to_cart);
+                            } else {
+                                addCart.setEnabled(false);
+                                quantityOfCart=0;
+                                tv_quantityOfCart.setText(String.valueOf(quantityOfCart));
+                                addCart.setText(R.string.no_stone);
+                            }*/
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                try {
+                }, (VolleyError error) -> {
+                    error.printStackTrace();
+                    //tv_name.setText("That didn't work!");
+                })
+                {
+                    @Override
+                    protected Map<String,String> getParams(){
+                        Map<String,String> params = new HashMap<>();
+                        params.put("email",String.valueOf(email));
+                        params.put("code",String.valueOf(code));
+                        return params;
+                    }
+                };
+                Log.i("test:", stringRequest.toString());
+                queue.add(stringRequest);
+
+
+                /*try {
                     url = new URL(APIUrl.url+"/orderDetail.php");
                     con = (HttpURLConnection) url.openConnection();
                     con.setRequestMethod("GET");
@@ -114,18 +170,23 @@ public class CheckOrderFragment extends Fragment {
 
                     JSONObject responseJSON = new JSONObject(result);
                     orders = responseJSON.getJSONArray("products");
-                    for(int i = 0; i < orders.length(); i++){
+                    orderDetailList[0] = "Product Name\t\tQty\tPrice\n";
+                    for(int i = 1; i < orders.length(); i++){
                         JSONObject order = orders.getJSONObject(i);
                         String productName = order.optString("productName");
                         String price = order.optString("price");
                         String quantity = order.optString("quantity");
-                        orderList[i] = "Product Name: " + productName + "\nPrice: " + price + "\nQuantity: " + quantity;
+                        orderDetailList[i] = "Product Name: " + productName + "\nPrice: " + price + "\nQuantity: " + quantity;
                     }
-                    ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orderList);
-                    lvOrder.setAdapter(adapter);
                 }
                 catch (Exception e){
                     e.printStackTrace();
+                }
+
+                 */
+                if (orderDetailList != null) {
+                    ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, orderDetailList);
+                    lvOrderDetail.setAdapter(adapter);
                 }
             }
         });
@@ -133,8 +194,6 @@ public class CheckOrderFragment extends Fragment {
         URL url = null;
         InputStream inputStream = null;
         String result = "";
-
-
 
         return root;
     }
