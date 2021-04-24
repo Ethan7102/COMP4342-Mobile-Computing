@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
+import com.example.mobileshopping.ui.shoppingCart.CartProduct;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
@@ -34,21 +36,20 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class CheckOrderFragment extends Fragment {
 
-    TextView txtEmail;
-    TextView txtCode;
+    TextView txtEmail, txtCode, tv_amount;
     ListView lvOrderDetail;
-    MaterialButton btnConfirm;
-    HttpURLConnection con;
-    JSONArray orderDetail;
-    String[] orderDetailList;
-    private RequestQueue queue;
+    Button btnConfirm;
     String url = APIUrl.url+"/orderDetail.php";
+    String email, code;
+    private ArrayList<OrderItem> data;
+    private RequestQueue queue;
     private CheckOrderViewModel checkOrderViewModel;
     double amount;
 
@@ -65,81 +66,73 @@ public class CheckOrderFragment extends Fragment {
             }
         });
         queue = VolleySingleton.getInstance(getActivity().getApplicationContext()).getRequestQueue();
+        data = new ArrayList<>();
         txtEmail = root.findViewById(R.id.txtEmail);
         txtCode = root.findViewById(R.id.txtCode);
+        tv_amount = root.findViewById(R.id.tv_amount);
         lvOrderDetail = root.findViewById(R.id.lvOrder);
         btnConfirm = root.findViewById(R.id.btnConfirm);
-
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = txtEmail.getText().toString();
-                String code = txtCode.getText().toString();
+                email = txtEmail.getText().toString();
+                code = txtCode.getText().toString();
                 System.out.println(email+"  "+code);
-
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i("response", response);
-                        amount=0;
-                        try {
-                            System.out.println(response);
-                            JSONObject responseJSON = new JSONObject(response);
-                            orderDetail = responseJSON.getJSONArray("product");
-                            orderDetailList = new String[orderDetail.length()+3];
-                            String productName="Product Name";
-                            String qty="Qty";
-                            String price = "Price";
-                            String str = String.format("%-50s %8s %5s", productName,price, qty);
-                            orderDetailList[0] = str;
-                            System.out.println(orderDetail.length());
-                            for(int i = 0; i < orderDetail.length(); i++){
-                                JSONObject product = orderDetail.getJSONObject(i);
-                                productName = product.optString("productName");
-                                System.out.println("productName: "+productName);
-                                price = "$" + product.optString("price");
-                                amount+=product.optDouble("price")*product.optInt("quantity");
-                                qty = product.optString("quantity");
-                                str = String.format("%-50s %8s %5s", productName,price,qty);
-                                orderDetailList[i+1] = str;
-                            }
-                            str = "Total amount: $"+amount;
-                            orderDetailList[orderDetail.length()+1] = str;
-                            str = "Order status:";
-                            orderDetailList[orderDetail.length()+2] = str;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        if (orderDetailList != null) {
-                            ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, orderDetailList);
-                            lvOrderDetail.setAdapter(adapter);
-                        }
-                        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(txtCode.getWindowToken(), 0);
-                    }
-                }, (VolleyError error) -> {
-                    error.printStackTrace();
-                    //tv_name.setText("That didn't work!");
-                })
-                {
-                    @Override
-                    protected Map<String,String> getParams(){
-                        Map<String,String> params = new HashMap<>();
-                        params.put("email",email);
-                        params.put("code",code);
-                        return params;
-                    }
-                };
-                Log.i("test:", stringRequest.toString());
-                queue.add(stringRequest);
-
-
+                getData();
             }
         });
 
-        URL url = null;
-        InputStream inputStream = null;
-        String result = "";
-
         return root;
+    }
+
+    public void getData() {
+        data.clear();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i("response", response);
+                amount=0;
+                try {
+                    System.out.println(response);
+                    JSONObject responseJSON = new JSONObject(response);
+                    JSONArray orderDetail = responseJSON.getJSONArray("product");
+                    for(int i = 0; i < orderDetail.length(); i++){
+                        JSONObject product = orderDetail.getJSONObject(i);
+                        int price = product.getInt("price");
+                        int quantity = product.getInt("quantity");
+                        OrderItem item = new OrderItem(product.getString("productName"), price, quantity);
+                        amount+=price*quantity;
+                        data.add(item);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                initListView();
+            }
+        }, (VolleyError error) -> {
+            error.printStackTrace();
+            //tv_name.setText("That didn't work!");
+        })
+        {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<>();
+                params.put("email",email);
+                params.put("code",code);
+                return params;
+            }
+        };
+        queue.add(stringRequest);
+    }
+
+    public void initListView() {
+        OrderItemAdapter adapter = new OrderItemAdapter(data, getActivity());
+        lvOrderDetail.setAdapter(adapter);
+        if (!data.isEmpty()) {
+            tv_amount.setText("HKD$"+amount);
+        } else {
+            adapter.notifyDataSetChanged();
+            tv_amount.setText("HKD$0");
+        }
     }
 }
