@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class ShoppingCarAdapter extends BaseAdapter {
+public class ShoppingCartAdapter extends BaseAdapter {
 
     private ArrayList<CartProduct> data=new ArrayList<>();
     private Context mContext;
     SharedPreferences cart;
 
-    public ShoppingCarAdapter(ArrayList<CartProduct> data, Context mContext) {
+    public ShoppingCartAdapter(ArrayList<CartProduct> data, Context mContext) {
         this.data = data;
         this.mContext = mContext;
         cart = mContext.getSharedPreferences("shopping_cart", MODE_PRIVATE);
