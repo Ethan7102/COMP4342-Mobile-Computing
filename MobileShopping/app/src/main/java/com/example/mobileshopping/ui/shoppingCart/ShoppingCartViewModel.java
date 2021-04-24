@@ -1,4 +1,4 @@
-package com.example.mobileshopping.ui.dashboard;
+package com.example.mobileshopping.ui.shoppingCart;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

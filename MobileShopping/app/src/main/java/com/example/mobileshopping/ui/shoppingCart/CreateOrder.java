@@ -1,4 +1,4 @@
-package com.example.mobileshopping.ui.dashboard;
+package com.example.mobileshopping.ui.shoppingCart;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +17,6 @@ import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

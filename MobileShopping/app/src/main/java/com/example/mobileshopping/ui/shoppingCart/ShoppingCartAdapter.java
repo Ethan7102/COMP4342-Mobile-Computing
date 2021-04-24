@@ -1,14 +1,12 @@
-package com.example.mobileshopping.ui.dashboard;
+package com.example.mobileshopping.ui.shoppingCart;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 

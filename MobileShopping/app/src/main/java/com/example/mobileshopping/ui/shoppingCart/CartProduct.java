@@ -1,4 +1,4 @@
-package com.example.mobileshopping.ui.dashboard;
+package com.example.mobileshopping.ui.shoppingCart;
 
 public class CartProduct {
     private String name;

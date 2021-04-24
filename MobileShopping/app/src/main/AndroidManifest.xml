@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileShopping"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.dashboard.CreateOrder"></activity>
+        <activity android:name=".ui.shoppingCart.CreateOrder"></activity>
         <activity android:name=".ui.home.ProductDetail" />
         <activity
             android:name=".MainActivity"

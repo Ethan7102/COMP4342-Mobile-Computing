@@ -1,4 +1,4 @@
-package com.example.mobileshopping.ui.notifications;
+package com.example.mobileshopping.ui.checkOrder;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
