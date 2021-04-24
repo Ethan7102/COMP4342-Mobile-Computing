@@ -1,22 +1,14 @@
 package com.example.mobileshopping.ui.notifications;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.net.Uri;
-import android.content.Intent;
-import android.content.ActivityNotFoundException;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +21,6 @@ import com.example.mobileshopping.R;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -44,7 +35,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 
-public class NotificationsFragment extends Fragment {
+public class CheckOrderFragment extends Fragment {
 
     TextView txtEmail;
     TextView txtCode;
@@ -55,15 +46,15 @@ public class NotificationsFragment extends Fragment {
     String[] orderList;
 
 
-    private NotificationsViewModel notificationsViewModel;
+    private CheckOrderViewModel checkOrderViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        checkOrderViewModel =
+                new ViewModelProvider(this).get(CheckOrderViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         //final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        checkOrderViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 //textView.setText(s);

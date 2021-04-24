@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -28,7 +27,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.mobileshopping.APIUrl;
 import com.example.mobileshopping.R;
 import com.example.mobileshopping.VolleySingleton;
-import com.example.mobileshopping.ui.home.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,11 +40,11 @@ import java.util.Map;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class DashboardFragment extends Fragment {
+public class ShoppingCartFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ShoppingCartViewModel shoppingCartViewModel;
     private ArrayList<CartProduct> data;
-    private ShoppingCarAdapter shoppingCarAdapter;
+    private ShoppingCartAdapter shoppingCartAdapter;
     private RequestQueue queue;
     private ListView cartList;
     Button btn_order;
@@ -57,8 +55,8 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        shoppingCartViewModel =
+                new ViewModelProvider(this).get(ShoppingCartViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         cartList =root.findViewById(R.id.lv_1);
         cart = getActivity().getSharedPreferences("shopping_cart", MODE_PRIVATE);
@@ -68,7 +66,7 @@ public class DashboardFragment extends Fragment {
         et_email = root.findViewById(R.id.et_email);
         data=new ArrayList<>();
         initData();
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        shoppingCartViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 //textView.setText(s);
@@ -127,8 +125,8 @@ public class DashboardFragment extends Fragment {
         queue.add(stringRequest);
     }
     public void initActivity() {
-        shoppingCarAdapter = new ShoppingCarAdapter(data, getActivity());
-        cartList.setAdapter(shoppingCarAdapter);
+        shoppingCartAdapter = new ShoppingCartAdapter(data, getActivity());
+        cartList.setAdapter(shoppingCartAdapter);
         tv_amount.setText("HKD$"+ calAmount());
         btn_order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,10 +153,10 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(shoppingCarAdapter!=null && cart.getAll().isEmpty()) {
+        if(shoppingCartAdapter !=null && cart.getAll().isEmpty()) {
             data.clear();
             et_email.setText("");
-            shoppingCarAdapter.notifyDataSetChanged();
+            shoppingCartAdapter.notifyDataSetChanged();
         }
     }
 }
