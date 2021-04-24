@@ -106,19 +106,12 @@ public class ProductDetail extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.btn_addCart:
                 SharedPreferences cart = getSharedPreferences("shopping_cart", MODE_PRIVATE);
-                int newCart;
                 int productInCart=cart.getInt(String.valueOf(id), 0);
-                if(quantityOfCart+productInCart>quantity) {
-                    newCart=quantity;
-                    Toast.makeText(this, productName+" "+" is no enough stock", Toast.LENGTH_SHORT).show();
-                } else {
-                    newCart=quantityOfCart+productInCart;
-                    Toast.makeText(this, productName+" "+getResources().getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show();
-                }
                 cart.edit()
-                        .putInt(String.valueOf(id), newCart)
+                        .putInt(String.valueOf(id), quantityOfCart+productInCart)
                         .apply();
                 Log.i("Cart item", String.valueOf(quantityOfCart+productInCart));
+                Toast.makeText(this, productName+" "+getResources().getString(R.string.add_to_cart), Toast.LENGTH_SHORT).show();
                 finish();
                 break;
             case R.id.btn_add:
