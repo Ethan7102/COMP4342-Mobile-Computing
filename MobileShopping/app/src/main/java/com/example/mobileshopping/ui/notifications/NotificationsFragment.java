@@ -116,6 +116,8 @@ public class NotificationsFragment extends Fragment {
                     while ((line = bufferedReader.readLine()) != null) {
                         result += line;
                     }
+                    //Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+
                     Log.d("connectServer", "process complete");
                     inputStream.close();
 
