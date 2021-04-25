@@ -4,16 +4,16 @@
 	$count=0;
 	$sql_check = "select productID, quantity from product where productID in (";
 	foreach($obj as $key => $value) {
-		$sql_check .= "$key";
+		$sql_check .= "$value";
 		++$count;
-		if($count!=$i) {
-			$sql_check.=",";
+		if(!$count==$i) {
+			$sql_detail.=",";
 		}
 	}
 	$sql_check .= ") for update";
 	$result = $link->query($sql_check);
 	while ($row = $result->fetch_assoc()) {
-		if($obj[$row['productID']]>$row['quantity']) {
+		if(!$obj[$row['productID']]<=$row['quantity']) {
 			exit();
 		}
 	}
