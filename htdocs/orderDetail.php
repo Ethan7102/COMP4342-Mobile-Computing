@@ -8,11 +8,19 @@
     {
         $output[] = $row;
     }
+	//get order status
+	$sql="SELECT * FROM comp4342_msdb.order WHERE email='$email' AND confirmationCode='$code'";
+	$result=$link->query($sql) or die($link->error);
+	
+	while ($row = $result->fetch_assoc())
+    {
+        $status = $row["status"];
+    }
 	if(isset($output)) {
-		$json = ["status" => "success", "product" => $output];
+		$json = ["status" => $status, "product" => $output];
 		echo json_encode($json, JSON_UNESCAPED_UNICODE);
 	} else {
-		$status = "confirmation code or email error";
+		$status = "confirmation code or email is incorrect";
 		$json = ["status" => $status];
 		echo json_encode($json, JSON_UNESCAPED_UNICODE);
 	}
