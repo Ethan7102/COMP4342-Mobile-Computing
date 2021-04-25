@@ -19,7 +19,24 @@ In the directory of XAMPP, go to your htdocs folder and put all the PHP format d
 
 run the XAMPP and start the first two modules (Apache & MySQL).
 
- ![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p3.png)
+![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p3.png)
+
+Open your browser and go to http://localhost/phpmyadmin/index.php
+
+![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p6.png)
+
+ 
+Click the import button at the top.
+
+![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p7.png)
+
+Select the MSDB.sql in MSDB folder and click the execute button at the bottom right corner. 
+ 
+
+Then, you will see a comp4342_msdb database.
+
+![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p8.png)
+
 
 
 Run the Android Studio and click the Open an Existing Project. Then, select the MobileShopping application and click “OK” to open it.
