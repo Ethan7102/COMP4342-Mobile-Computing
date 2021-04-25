@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
                                 JSONObject product = products.getJSONObject(i);
                                 if (product.getString("productName").contains(keyword)) {
                                     displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                    productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                                 }
                             }
                         }
@@ -146,7 +146,7 @@ public class HomeFragment extends Fragment {
                                     JSONObject product = products.getJSONObject(i);
                                     if (product.getInt("promotion") == 1) {
                                         displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                                     }
                                 }
                             }
@@ -161,11 +161,11 @@ public class HomeFragment extends Fragment {
                                     JSONObject product = products.getJSONObject(i);
                                     if (parent.getItemAtPosition(position).toString().equals("All Product")) {
                                         displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                                     } else {
                                         if (product.getString("type").equals(parent.getItemAtPosition(position).toString())) {
                                             displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                            productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                            productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                                         }
                                     }
                                 }
@@ -242,7 +242,7 @@ public class HomeFragment extends Fragment {
                     JSONObject product = products.getJSONObject(i);
                     if (product.getInt("promotion") == 1) {
                         displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                        productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                     }
                 }
                 //save product list
@@ -271,7 +271,7 @@ public class HomeFragment extends Fragment {
                             JSONObject product = products.getJSONObject(i);
                             if (product.getInt("promotion") == 1) {
                                 displayedProductId[numOfDisplayedProducts] = product.getInt("productID");
-                                productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHK$" + product.getString("price");
+                                productList[numOfDisplayedProducts++] = product.getString("productName") + "\nHKD$" + product.getString("price");
                             }
                         }
 
