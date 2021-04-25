@@ -15,11 +15,11 @@
         android:layout_marginTop="0dp">
 
         <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="Please provide your email: " />
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Please provide your email: " />
 
         <EditText
                 android:id="@+id/txtEmail"
@@ -81,6 +81,15 @@
         android:layout_marginBottom="80dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp" />
-        android:text="0" />
+
+    <TextView
+        android:id="@+id/tv_orderStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="80dp" />
+    android:text="0" />
 
 </RelativeLayout>

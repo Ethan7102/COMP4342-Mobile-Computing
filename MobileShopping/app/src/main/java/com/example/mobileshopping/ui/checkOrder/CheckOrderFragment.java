@@ -43,11 +43,11 @@ import java.util.Map;
 
 public class CheckOrderFragment extends Fragment {
 
-    TextView txtEmail, txtCode, tv_amount;
+    TextView txtEmail, txtCode, tv_amount, tv_orderStatus;
     ListView lvOrderDetail;
     Button btnConfirm;
     String url = APIUrl.url+"/orderDetail.php";
-    String email, code;
+    String email, code, orderStatus;
     private ArrayList<OrderItem> data;
     private RequestQueue queue;
     private CheckOrderViewModel checkOrderViewModel;
@@ -72,6 +72,7 @@ public class CheckOrderFragment extends Fragment {
         tv_amount = root.findViewById(R.id.tv_amount);
         lvOrderDetail = root.findViewById(R.id.lvOrder);
         btnConfirm = root.findViewById(R.id.btnConfirm);
+        tv_orderStatus = root.findViewById(R.id.tv_orderStatus);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +80,7 @@ public class CheckOrderFragment extends Fragment {
                 code = txtCode.getText().toString();
                 System.out.println(email+"  "+code);
                 getData();
+                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(txtCode.getWindowToken(), 0);
             }
         });
 
@@ -87,6 +89,7 @@ public class CheckOrderFragment extends Fragment {
 
     public void getData() {
         data.clear();
+        orderStatus="";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -95,6 +98,7 @@ public class CheckOrderFragment extends Fragment {
                 try {
                     System.out.println(response);
                     JSONObject responseJSON = new JSONObject(response);
+                    orderStatus = responseJSON.getString("status");
                     JSONArray orderDetail = responseJSON.getJSONArray("product");
                     for(int i = 0; i < orderDetail.length(); i++){
                         JSONObject product = orderDetail.getJSONObject(i);
@@ -130,9 +134,11 @@ public class CheckOrderFragment extends Fragment {
         lvOrderDetail.setAdapter(adapter);
         if (!data.isEmpty()) {
             tv_amount.setText("HKD$"+amount);
+            tv_orderStatus.setText("\tStatus: "+orderStatus);
         } else {
             adapter.notifyDataSetChanged();
-            tv_amount.setText("HKD$0");
+            tv_amount.setText("");
+            tv_orderStatus.setText("\t"+orderStatus);
         }
     }
 }
