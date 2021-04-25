@@ -11,6 +11,7 @@ https://developer.android.com/studio/archive
 Second, you need to download XAMPP to connect to the MariaDB database. The recommended version is 8.0.2.
 https://www.apachefriends.org/download.html
  
+
 In the directory of XAMPP, go to your htdocs folder and put all the PHP format documents into the folder.
 
 ![Alt text](https://github.com/Ethan7102/COMP4342-Mobile-Computing/blob/main/Images/p2.png)
